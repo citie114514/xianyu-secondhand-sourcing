@@ -72,6 +72,24 @@ Agent 会读 `SKILL.md`（通用流程）；**只有当品类是电脑配件时*
 
 > **分层设计**：`SKILL.md` 必须保持"任何品类都能直接用"的通用性；品类细节一律放进 `references/`，按需加载，避免无关任务白读几百行。
 
+## 运行环境要求
+
+**必须有浏览器自动化能力**（闲鱼是重前端 SPA，纯 HTTP 拿不到卡片数据）。
+
+`SKILL.md` 的 `allowed-tools` 列的是参考实现，方法论本身不依赖具体工具名：
+
+| 能力 | 参考实现 | 可替换为 |
+|---|---|---|
+| 开页面 / 切标签 | `ego_space_open` `ego_navigate` `ego_tabs` | Playwright `page.goto` |
+| 页内执行 JS | `ego_js` `ego_script` | `page.evaluate` |
+| 点击 | `ego_click` | `page.click` |
+| CDP 原生命令 | `ego_cdp` | `context.addCookies()` / 裸 CDP |
+| 进程外抓取 | `Bash` + `curl` | 任意 HTTP 客户端 |
+| 图片放大读参数表 | `Bash` + `python`(Pillow) | ImageMagick |
+| 视频字幕 / 帧 | `Bash` + `yt-dlp` / `ffmpeg` | 任意下载器 |
+
+> 没有浏览器工具时，检索与核验部分无法完成。**此时应明确告知用户缺能力，不要伪造结果。**
+
 ---
 
 ## SKILL.md 里有什么

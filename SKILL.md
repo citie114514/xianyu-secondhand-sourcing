@@ -3,7 +3,7 @@ name: xianyu-secondhand-sourcing
 version: "2.7.0"
 description: 闲鱼（goofish）通用查找、比价与批量收藏方法论，适用任何品类（耳机/数码/球鞋/乐器/家具/收藏品/工具/电脑配件…），不绑具体商品。本文件是**通用主流程**，任何品类都只需读本文件；`references/` 下是可选品类手册，**只在品类命中时按需加载**。六条可迁移技术：① 模糊需求直进闲鱼=把噪声当候选，必须先把需求翻译成「型号或关键词白名单」再逐个搜，白名单由厂商官网、官方 App 支持列表等权威源构建；② 每个品类都有「同名不同质」的属性词，同一个词在行内分裂成互不等价的几种东西，必须用官方规格证伪而不是读标题，也不能靠型号后缀推断；③ 闲鱼搜索页 `&page=N` 完全无效、价格筛选框也不改 URL，翻页要用页面内组件且以「首条 item id 是否变化」为硬判据；④ 收藏等写操作的登录态只能靠 DOM 事实判定（cookie 注入成功≠会话有效），且收藏必须做「按钮文案回读 + 收藏页 ID 交集」双层验证；⑤ 卖家身份（商家/个人/好评率）不是风险变量，件的可验证证据才是；⑥ 先取时效性锚（近期第三方实测）再谈极限省钱，矿卡/魔改等替补方案默认作废。含 DOM 契约、价格分行正则、Netscape cookie 经 CDP 注入姿势、排除词模板、读图核验、硬约束串联、耳机品类完整示例，以及可选品类手册 `references/pc-parts.md`（电脑配件：电源判据、显卡驱动生命周期、矿卡/魔改卡门禁、TLC 颗粒、PCIe 代际配对等）。当用户说「闲鱼上帮我找XX」「二手比价」「帮我把这些挂单收藏了」「闲鱼登录不上/被风控」「Playwright 抓闲鱼」时使用。
 argument-hint: "[商品需求 / 型号名 / 闲鱼链接]"
-allowed-tools: Bash, Read, Write, Edit
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, WebFetch, ego_space_open, ego_navigate, ego_tabs, ego_js, ego_script, ego_cdp, ego_click, ego_snapshot, ego_read_element, ego_screenshot
 user-invocable: true
 agent_created: true
 license: MIT
@@ -383,6 +383,24 @@ const loginBtn = [...document.querySelectorAll("a,div,span")]
 - **有头真 Chrome 不触发风控**：本机真实 Chrome + `headless=no`，单次会话 200+ 次请求（含 20 次详情页、16 次写操作）**零验证码**。无头更容易被拦。
 - 页面脚本里**别用模板字面量**拼含引号的片段，宿主解析易报 `Expected ',', got ')'`；用普通字符串 + `(function(){...})()` 最稳。
 - 长驻任务不要把浏览器空间关掉（persistent profile 模式），登录态要留在磁盘上。
+
+### 工具依赖与替代
+
+`allowed-tools` 里列的是本文档的**参考实现**（ego-browser 系 + 通用文件/命令行工具）。换环境时按功能对应替换即可，**方法论不依赖具体工具名**：
+
+| 能力 | 本文档用的 | 可替换为 |
+|---|---|---|
+| 打开页面 / 切标签 | `ego_space_open` `ego_navigate` `ego_tabs` | Playwright `page.goto` / `browser_tabs` |
+| 页内执行 JS（抓卡片、抽价、判登录） | `ego_js` `ego_script` | Playwright `page.evaluate` |
+| 点击（收藏按钮） | `ego_click` | Playwright `page.click` |
+| 读元素 / 快照 | `ego_read_element` `ego_snapshot` | Playwright `locator.innerText()` |
+| CDP 原生命令（cookie 注入、`Network.setCookies`） | `ego_cdp` | Playwright `context.addCookies()` / 裸 CDP session |
+| 截图（读图核验用） | `ego_screenshot` | Playwright `page.screenshot()` |
+| 进程外抓取（绕开站点风控劫持 `window.fetch`） | `Bash` + `curl` | 任何命令行 HTTP 客户端 |
+| 图片放大读参数表 | `Bash` + `python`(Pillow) | ImageMagick `convert -crop -resize` |
+| 视频字幕 / 帧（"先取时效性锚"时用） | `Bash` + `yt-dlp` / `ffmpeg` | 任意下载器 + 转写工具 |
+
+**没有浏览器工具时**：本 skill 的检索与核验部分无法完成（闲鱼是重前端 SPA，纯 HTTP 拿不到卡片数据）。此时应明确告知用户缺能力，**不要伪造结果**。
 
 ## 交付物形态
 
