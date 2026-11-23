@@ -1,7 +1,7 @@
 ---
 name: xianyu-secondhand-sourcing
-version: "2.8.1"
-description: 闲鱼（goofish）通用查找、比价与批量收藏方法论，适用任何品类（耳机/数码/球鞋/乐器/家具/收藏品/工具/电脑配件…），不绑具体商品。本文件是**通用主流程**，任何品类都只需读本文件；`references/` 下是可选品类手册，**只在品类命中时按需加载**。六条可迁移技术：① 模糊需求直进闲鱼=把噪声当候选，必须先把需求翻译成「型号或关键词白名单」再逐个搜，白名单由厂商官网、官方 App 支持列表等权威源构建；② 每个品类都有「同名不同质」的属性词，同一个词在行内分裂成互不等价的几种东西，必须用官方规格证伪而不是读标题，也不能靠型号后缀推断；③ 闲鱼搜索页 `&page=N` 完全无效、价格筛选框也不改 URL，翻页要用页面内组件且以「首条 item id 是否变化」为硬判据；④ 收藏等写操作的登录态只能靠 DOM 事实判定（cookie 注入成功≠会话有效），且收藏必须做「按钮文案回读 + 收藏页 ID 交集」双层验证；⑤ 卖家身份不决定风险（件的可验证证据才是），但决定「细节问谁问得到」——参数化商品找商家（有测试台），非标生活物品找个人（只有他会逐个讲单件细节）；⑥ 先取时效性锚（近期第三方实测）再谈极限省钱，矿卡/魔改等替补方案默认作废。含 DOM 契约、价格分行正则、Netscape cookie 经 CDP 注入姿势、排除词模板、读图核验、硬约束串联、耳机品类完整示例，含**经验来源索引 `references/sources.md`**（平台官方规则：受理期限/四类问题定义/小法庭17人9票/验货宝验什么不验什么；厂商口径：EOL公告/CPU支持列表/SN查询；社区骗术库按物理伪装·刷BIOS·身份伪装·交易环节四层分类；行情源：VRAMGlass每6小时抓闲鱼挂单中位价、5iVideo按芯片聚合二手区间、eBay已售出比价）以及可选品类手册 `references/pc-parts.md`（电脑配件：电源判据、显卡驱动生命周期、矿卡/魔改卡门禁、TLC 颗粒、PCIe 代际配对等）。当用户说「闲鱼上帮我找XX」「二手比价」「帮我把这些挂单收藏了」「闲鱼登录不上/被风控」「Playwright 抓闲鱼」时使用。
+version: "2.9.0"
+description: 闲鱼（goofish）通用查找、比价与批量收藏方法论，适用任何品类（耳机/数码/球鞋/乐器/家具/收藏品/工具/电脑配件…），不绑具体商品。本文件是**通用主流程**，任何品类都只需读本文件；`references/` 下是可选品类手册，**只在品类命中时按需加载**。六条可迁移技术：① 模糊需求直进闲鱼=把噪声当候选，必须先把需求翻译成「型号或关键词白名单」再逐个搜，白名单由厂商官网、官方 App 支持列表等权威源构建；② 每个品类都有「同名不同质」的属性词，同一个词在行内分裂成互不等价的几种东西，必须用官方规格证伪而不是读标题，也不能靠型号后缀推断；③ 闲鱼搜索页 `&page=N` 完全无效、价格筛选框也不改 URL，翻页要用页面内组件且以「首条 item id 是否变化」为硬判据；④ 收藏等写操作的登录态只能靠 DOM 事实判定（cookie 注入成功≠会话有效），且收藏必须做「按钮文案回读 + 收藏页 ID 交集」双层验证；⑤ 卖家身份不决定风险（件的可验证证据才是），但决定「细节问谁问得到」——参数化商品找商家（有测试台），非标生活物品找个人（只有他会逐个讲单件细节）；⑥ 先取时效性锚（近期第三方实测）再谈极限省钱，矿卡/魔改等替补方案默认作废。含**浏览器方案降级链**（DSH→ego插件 / ego桌面端macOS+Windows / 用户Chrome CDP / Playwright有头）、DOM 契约、价格分行正则、Netscape cookie 经 CDP 注入姿势、排除词模板、读图核验、硬约束串联、耳机品类完整示例，含**经验来源索引 `references/sources.md`**（平台官方规则：受理期限/四类问题定义/小法庭17人9票/验货宝验什么不验什么；厂商口径：EOL公告/CPU支持列表/SN查询；社区骗术库按物理伪装·刷BIOS·身份伪装·交易环节四层分类；行情源：VRAMGlass每6小时抓闲鱼挂单中位价、5iVideo按芯片聚合二手区间、eBay已售出比价）以及可选品类手册 `references/pc-parts.md`（电脑配件：电源判据、显卡驱动生命周期、矿卡/魔改卡门禁、TLC 颗粒、PCIe 代际配对等）。当用户说「闲鱼上帮我找XX」「二手比价」「帮我把这些挂单收藏了」「闲鱼登录不上/被风控」「Playwright 抓闲鱼」时使用。
 argument-hint: "[商品需求 / 型号名 / 闲鱼链接]"
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, WebFetch, ego_space_open, ego_navigate, ego_tabs, ego_js, ego_script, ego_cdp, ego_click, ego_snapshot, ego_read_element, ego_screenshot
 user-invocable: true
@@ -20,6 +20,7 @@ license: MIT
 | 你的任务 | 读什么 |
 |---|---|
 | **任何品类**的查找 / 比价 / 收藏 | **只读本文件**（六条原则 + 四个阶段 + 品类检查表）。够用了。 |
+| **开工第一步**：确认浏览器方案 | 本文件「环境姿势」的降级链；细节读 `references/browser-setup.md`（ego 插件 / ego 桌面端 macOS+Windows / 用户 Chrome CDP / Playwright 有头） |
 | 需要**查证某个判断**（这是假的吗 / 价格合理吗 / 能维权吗 / 还支持吗） | 本文件 + `references/sources.md`（**跨品类通用，任何任务都建议查**） |
 | 品类是**电脑配件 / DIY 装机** | 本文件 + `references/pc-parts.md`（同名拆分表、电源判据、矿卡魔改门禁、读图核验细节、价格锚点）+ `references/sources.md` |
 | 其他品类 | 用本文件的**通用流程** + 当场现查权威源。**不要套用 pc-parts.md 的任何判据。** |
@@ -407,9 +408,24 @@ const loginBtn = [...document.querySelectorAll("a,div,span")]
 - 页面脚本里**别用模板字面量**拼含引号的片段，宿主解析易报 `Expected ',', got ')'`；用普通字符串 + `(function(){...})()` 最稳。
 - 长驻任务不要把浏览器空间关掉（persistent profile 模式），登录态要留在磁盘上。
 
+### 浏览器方案降级链（**开工第一步**）
+
+不同环境的浏览器能力差别很大。**按顺序试，第一个可用的就停**：
+
+```
+① DSH 环境？           → ego 插件（ego_* 工具）      ← 默认，最优
+② ego 桌面端已装？      → ego-browser CLI / nodejs    ← 同样好（同引擎）
+③ 问用户用哪种方案      → 用户自己的 Chrome / 装 ego / 让我选
+④ Playwright 有头模式   → 兜底
+```
+
+**铁律：必须有头（`headless: false`）+ 持久化 profile + 任务结束不 close context。** 这三条满足哪一层都行；不满足的话用 ego 也会被拦。
+
+**详细适配见 [`references/browser-setup.md`](references/browser-setup.md)** —— 含每层的判断依据、调用姿势、macOS/Windows 路径差异、Chrome CDP 附着命令、Playwright 去特征脚本、截图超时绕过、全都不行时的正确姿势。
+
 ### 工具依赖与替代
 
-`allowed-tools` 里列的是本文档的**参考实现**（ego-browser 系 + 通用文件/命令行工具）。换环境时按功能对应替换即可，**方法论不依赖具体工具名**：
+`allowed-tools` 里列的是**参考实现**（ego-browser 系 + 通用文件/命令行工具）。换环境时按功能对应替换，**方法论不依赖具体工具名**：
 
 | 能力 | 本文档用的 | 可替换为 |
 |---|---|---|
@@ -423,7 +439,7 @@ const loginBtn = [...document.querySelectorAll("a,div,span")]
 | 图片放大读参数表 | `Bash` + `python`(Pillow) | ImageMagick `convert -crop -resize` |
 | 视频字幕 / 帧（"先取时效性锚"时用） | `Bash` + `yt-dlp` / `ffmpeg` | 任意下载器 + 转写工具 |
 
-**没有浏览器工具时**：本 skill 的检索与核验部分无法完成（闲鱼是重前端 SPA，纯 HTTP 拿不到卡片数据）。此时应明确告知用户缺能力，**不要伪造结果**。
+**没有浏览器工具时**：本 skill 的检索与核验部分无法完成（闲鱼是重前端 SPA，纯 HTTP 拿不到卡片数据）。此时应明确告知用户缺能力，**不要伪造结果**，也不要拿上一轮报价充当本轮。
 
 ## 交付物形态
 
@@ -456,6 +472,7 @@ const loginBtn = [...document.querySelectorAll("a,div,span")]
 
 | 文件 | 覆盖 |
 |---|---|
+| [`references/browser-setup.md`](references/browser-setup.md) | **浏览器方案降级链**：① DSH → ego 插件 ② ego 桌面端（macOS/Windows）③ 问用户（自己 Chrome CDP 附着 / 装 ego / 让我选）④ Playwright 有头兜底。含每层判断依据、调用姿势、平台路径差异、Playwright 去特征脚本、截图超时绕过、全都不行时的正确姿势。**铁律：有头 + 持久化 profile + 不 close context** |
 | [`references/sources.md`](references/sources.md) | **「某个判断该用哪个源来证伪」的索引**：中文社区（图吧/NGA/SMZDM）、英文社区（r/hardwareswap 的时间戳与 G&S 规则、eBay 已售出比价）、**平台官方规则（受理期限、四类问题定义、小法庭 17 人 9 票机制、验货宝验什么不验什么）**、厂商官方口径（EOL 公告、CPU 支持列表、SN 查询入口）、**行情数据源（VRAMGlass 每 6 小时抓闲鱼挂单中位价、5iVideo 按芯片聚合二手区间、老显卡库、慢慢买、eBay Sold）**、**骗术模式库（按物理伪装/刷 BIOS/身份伪装/交易环节四层分类）**、A–D 可信度分层 |
 
 > ⚠️ **读 sources.md 的一条纪律**：它的任何一条都不如"当场跑一遍测试"硬。规则能查、行情能查、骗术能查，但**唯一能证明这件东西是好的，是它在你这跑了测试**。

@@ -113,6 +113,7 @@ Agent 会读 `SKILL.md`（通用流程）；**只有当品类是电脑配件时*
 .
 ├── SKILL.md                 # 通用主流程（任何品类只需读这个）
 ├── references/
+│   ├── browser-setup.md     # 浏览器方案降级链（ego 插件/ego 桌面端/用户 Chrome/Playwright）
 │   ├── sources.md           # 经验来源索引（跨品类通用：平台规则/厂商口径/骗术库/行情源）
 │   └── pc-parts.md          # 可选品类手册：电脑配件 / DIY 装机
 ├── README.md
@@ -163,6 +164,41 @@ Agent 会读 `SKILL.md`（通用流程）；**只有当品类是电脑配件时*
 ### 附录 A · 耳机品类完整示例
 
 `SKILL.md` 文末有一个 110 行的完整走查：从「一百块以内，要降噪，能连手机」开始，五步走到可下单清单，并附一张「耳机 / 电脑配件 / 球鞋」的填表对照——证明同一套结构换品类只是"填什么"不同。
+
+---
+
+## references/browser-setup.md（开工第一步）
+
+闲鱼是重前端 SPA，**纯 HTTP 拿不到卡片数据**，必须有真浏览器。但不同环境的浏览器能力差别很大，所以给了**降级链**：
+
+```
+① DSH 环境？           → ego 插件（ego_* 工具）      ← 默认，最优
+② ego 桌面端已装？      → ego-browser CLI / nodejs    ← 同样好（同引擎）
+③ 问用户用哪种方案      → 用户自己的 Chrome CDP / 装 ego / 让我选
+④ Playwright 有头模式   → 兜底
+```
+
+**铁律：必须有头（`headless: false`）+ 持久化 profile + 任务结束不 close context。**
+
+这三条满足哪一层都行；不满足的话，用 ego 也会被拦。
+
+### 四层的风控表现对比
+
+| 层 | 风控表现 | 登录态 | 代价 |
+|---|---|---|---|
+| ① ego 插件 | **最好**：持久化 profile + 真人浏览器指纹 | 落盘复用，跨会话有效 | 需要 DSH |
+| ② ego 桌面端 | **同样好**：同引擎，独立进程 | 落盘复用 | 需要装桌面端 |
+| ③ 用户自己的 Chrome | **好**：真 Chrome，但 profile 被占用时不能开第二个实例 | 用户本来就有 | 需要用户配合 |
+| ④ Playwright 有头 | **中等**：Chromium 指纹 + 自动化标记，需额外去特征 | 需自己管 userDataDir | 无需装任何东西 |
+
+### 文档里有什么
+
+- 每层的**判断依据**（怎么确认装了没）+ 调用姿势
+- **macOS / Windows 路径差异**（安装位置、profile 目录、MSYS 路径写法）
+- 用户 Chrome 的 **CDP 附着完整命令**（两个平台各一份）
+- Playwright 的**去特征 initScript**（抹 `navigator.webdriver`、伪造 plugins/languages）
+- **截图超时绕过**（页面有大图时 `Page.captureScreenshot` 会 timeout）
+- **全都不行时的正确姿势**（明确告知缺能力，不伪造、不拿上一轮报价充当本轮）
 
 ---
 
